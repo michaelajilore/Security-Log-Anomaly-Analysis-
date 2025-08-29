@@ -46,7 +46,6 @@ def get_db_connection():
             'raise_on_warnings': True
         }
         
-        # Remove None values
         config = {k: v for k, v in config.items() if v is not None}
         
         print(f" Connecting to {config.get('host')}:{config.get('port')}...")
@@ -56,7 +55,6 @@ def get_db_connection():
         
     except mysql.connector.Error as err:
         print(f" Database connection failed: {err}")
-        print("\ Make sure you've set these environment variables:")
         print("   DB_HOST=your_host_from_freesqldatabase")
         print("   DB_USER=your_username")
         print("   DB_PASS=your_password")
@@ -76,7 +74,7 @@ def process_and_insert():
     cursor = conn.cursor()
 
     try:
-        # Ensure table exists
+        # check table exists
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS logs (
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -165,8 +163,6 @@ def test_connection():
         return False
 
 def main():
-    print("🚧 Starting safe log parse + insert (max 12,000 rows)...")
-    print("🔍 Testing database connection first...")
     
     if test_connection():
         process_and_insert()
@@ -175,3 +171,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
